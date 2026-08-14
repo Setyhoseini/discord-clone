@@ -28,6 +28,7 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - ALGORITHM=${ALGORITHM}
       - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
+      - ENVIRONMENT=development
       - UPLOAD_DIR=uploads
       - PROFILE_DIR=static/profiles
     volumes:

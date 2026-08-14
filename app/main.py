@@ -66,7 +66,15 @@ app.include_router(chat.router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+     allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:80",
+        "http://localhost",            # nginx on port 80
+        "http://127.0.0.1",            # same
+        "http://discord_frontend",     # container name (if using internal)
+        "https://your-render-frontend.onrender.com"  # for deployment
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
