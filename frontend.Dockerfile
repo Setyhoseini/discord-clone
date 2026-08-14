@@ -7,6 +7,7 @@ COPY frontend/package*.json ./
 RUN npm ci
 
 COPY frontend/ .
+RUN ls -la
 RUN npm run build
 
 # Serve with nginx
