@@ -110,11 +110,8 @@ export default function ChatList() {
 
     // ---- Filter chats by type and search ----
     const filteredChats = chats.filter((chat) => {
-        // Filter by type
         if (activeFilter === 'group' && chat.chat_type !== 'group') return false;
         if (activeFilter === 'channel' && chat.chat_type !== 'channel') return false;
-
-        // Filter by search query
         const name = chat.name || getChatName(chat);
         return name.toLowerCase().includes(searchQuery.toLowerCase());
     });
@@ -142,7 +139,7 @@ export default function ChatList() {
         navigate('/auth');
     };
 
-    // ---- Drawer content (shared between mobile and desktop) ----
+    // ---- Drawer content (shared) ----
     const drawerContent = (
         <Box sx={{ overflow: 'auto', display: 'flex', flexDirection: 'column', height: '100%' }}>
             {/* Logo */}
@@ -150,48 +147,22 @@ export default function ChatList() {
                 <Avatar sx={{ m: 1, width: 50, height: 50, border: '1px solid gray', bgcolor: 'secondary.main' }}>
                     <Sms sx={{ width: 32, height: 32 }} />
                 </Avatar>
-                <Typography variant="h6" fontWeight="bold">
-                    ChatFlow
-                </Typography>
+                <Typography variant="h6" fontWeight="bold">ChatFlow</Typography>
             </Box>
 
             {/* New Chat Button */}
             <Box sx={{ px: 2, pb: 2 }}>
-                <Button
-                    variant="contained"
-                    fullWidth
-                    startIcon={<AddIcon />}
-                    onClick={handleNewChatClick}
-                >
+                <Button variant="contained" fullWidth startIcon={<AddIcon />} onClick={handleNewChatClick}>
                     New Chat
                 </Button>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleNewChatClose}
-                >
-                    <MenuItem
-                        onClick={() => {
-                            setDialogOpen(true);
-                            handleNewChatClose();
-                        }}
-                    >
+                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleNewChatClose}>
+                    <MenuItem onClick={() => { setDialogOpen(true); handleNewChatClose(); }}>
                         <ChatIcon sx={{ mr: 1 }} /> New DM
                     </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            setGroupModalOpen(true);
-                            handleNewChatClose();
-                        }}
-                    >
+                    <MenuItem onClick={() => { setGroupModalOpen(true); handleNewChatClose(); }}>
                         <GroupAddIcon sx={{ mr: 1 }} /> New Group
                     </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            setChannelModalOpen(true);
-                            handleNewChatClose();
-                        }}
-                    >
+                    <MenuItem onClick={() => { setChannelModalOpen(true); handleNewChatClose(); }}>
                         <CampaignIcon sx={{ mr: 1 }} /> New Channel
                     </MenuItem>
                 </Menu>
@@ -199,7 +170,6 @@ export default function ChatList() {
 
             <Divider />
 
-            {/* Navigation */}
             <List>
                 {navItems.map((item) => (
                     <ListItem
@@ -219,7 +189,6 @@ export default function ChatList() {
 
             <Box sx={{ flexGrow: 1 }} />
 
-            {/* User Profile (sidebar bottom) */}
             <Divider />
             <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
                 <Avatar
@@ -278,20 +247,37 @@ export default function ChatList() {
             </Drawer>
 
             {/* ---- Main Content ---- */}
-            <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', width: '100%', backgroundColor: mode === 'light' ? '#f0f2f9' : '#1a1a1a', }}>
-                {/* Top Bar */}
+            <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', width: '100%', backgroundColor: mode === 'light' ? '#f0f2f9' : '#1a1a1a' }}>
+                {/* ---- Top Bar (responsive) ---- */}
                 <AppBar position="static" sx={{ backgroundColor: 'background.paper', zIndex: 0 }} elevation={1}>
-                    <Toolbar>
+                    <Toolbar
+                        sx={{
+                            display: 'flex',
+                            flexWrap: 'nowrap',
+                            gap: { xs: 0.5, sm: 1 },
+                            minHeight: 56,
+                        }}
+                    >
                         {/* Burger menu (mobile only) */}
                         <IconButton
                             edge="start"
-                            sx={{ display: { xs: 'flex', md: 'none' }, mr: 2 }}
+                            sx={{ display: { xs: 'flex', md: 'none' }, mr: 0.5, flexShrink: 0 }}
                             onClick={() => setMobileDrawerOpen(true)}
                         >
                             <MenuIcon />
                         </IconButton>
 
-                        <Typography variant="h6" sx={{ mr: 4, width: 100, color: 'text.primary' }}>
+                        {/* Title – now responsive, no fixed width */}
+                        <Typography
+                            variant="h6"
+                            sx={{
+                                flexShrink: 0,
+                                whiteSpace: 'nowrap',
+                                color: 'text.primary',
+                                fontSize: { xs: '0.85rem', sm: '1rem', md: '1.25rem' },
+                                mr: { xs: 0.5, sm: 1, md: 2 },
+                            }}
+                        >
                             {activeFilter === 'all'
                                 ? 'All Chats'
                                 : activeFilter === 'group'
@@ -299,6 +285,7 @@ export default function ChatList() {
                                     : 'Channels'}
                         </Typography>
 
+                        {/* Search field – flexible, takes remaining space */}
                         <TextField
                             size="small"
                             placeholder="Search chats..."
@@ -311,16 +298,25 @@ export default function ChatList() {
                                     </InputAdornment>
                                 ),
                             }}
-                            sx={{ width: { xs: 200, sm: 250, md: 300 }, backgroundColor: 'background.default', borderRadius: 1 }}
+                            sx={{
+                                display: { xs: 'none', md: 'block' },
+                                flex: 1,
+                                minWidth: 60,
+                                maxWidth: { xs: 150, sm: 200, md: 300 },
+                                backgroundColor: 'background.default',
+                                borderRadius: 1,
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': { border: 'none' },
+                                },
+                            }}
                         />
-                        <div style={{ marginLeft: 'auto' }}>
-                            <IconButton
-                                onClick={toggleTheme}
-                                sx={{ width: 40, height: 40, mr: 1 }}
-                            >
+
+                        {/* Right icons – fixed on the right */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0, ml: { xs: 0.5, sm: 1 } }}>
+                            <IconButton onClick={toggleTheme} sx={{ width: 32, height: 32, mr: 0.5 }}>
                                 {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
                             </IconButton>
-                            <IconButton onClick={() => navigate('/profile')}>
+                            <IconButton onClick={() => navigate('/profile')} sx={{ p: 0.5 }}>
                                 <Avatar
                                     src={getFullImageUrl(user?.profile_photo_url)}
                                     sx={{ width: 32, height: 32 }}
@@ -328,11 +324,11 @@ export default function ChatList() {
                                     {user?.name?.[0]?.toUpperCase() || 'U'}
                                 </Avatar>
                             </IconButton>
-                        </div>
+                        </Box>
                     </Toolbar>
                 </AppBar>
 
-                {/* Chat List */}
+                {/* ---- Chat List (unchanged) ---- */}
                 <Box sx={{ flexGrow: 1, overflow: 'auto', p: 2 }}>
                     {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
@@ -360,7 +356,7 @@ export default function ChatList() {
                                         sx={{
                                             borderRadius: 2,
                                             '&:hover': { backgroundColor: 'action.hover' },
-                                            color: 'text.primary'
+                                            color: 'text.primary',
                                         }}
                                     >
                                         <ListItemAvatar>
@@ -411,6 +407,7 @@ export default function ChatList() {
                                             )}
                                         </Box>
                                     </ListItem>
+                                    {index < filteredChats.length - 1 && <Divider />}
                                 </React.Fragment>
                             ))}
                         </List>
@@ -418,12 +415,10 @@ export default function ChatList() {
                 </Box>
             </Box>
 
-            {/* ---- Dialogs ---- */}
+            {/* ---- Dialogs (unchanged) ---- */}
             <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="sm" fullWidth>
                 <DialogTitle>
-                    <Typography sx={{ color: theme.palette.text.primary }}>
-                        Start a New DM
-                    </Typography>
+                    <Typography sx={{ color: theme.palette.text.primary }}>Start a New DM</Typography>
                 </DialogTitle>
                 <DialogContent>
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>

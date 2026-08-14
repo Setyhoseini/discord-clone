@@ -9,7 +9,15 @@ export default function useChatWebSocket({ chatId, onMessageReceived }) {
         if (!token) return;
         if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return;
 
-        const ws = new WebSocket(`ws://localhost:8000/ws?token=${token}`);
+        // ---- Build WebSocket URL dynamically ----
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        // Remove trailing slash if present
+        const baseUrl = apiUrl.replace(/\/$/, '');
+        // Replace http:// with ws:// and https:// with wss://
+        const wsBase = baseUrl.replace(/^http/, 'ws');
+        const wsUrl = `${wsBase}/ws?token=${token}`;
+
+        const ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {
             console.log('WebSocket connected');

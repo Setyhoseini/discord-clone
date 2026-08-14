@@ -396,8 +396,7 @@ export default function ProfilePage() {
                                         color="error"
                                         onClick={handleCancel}
                                         sx={{
-                                            flex: '0 0 auto',
-                                            minWidth: '240px',
+                                            flex: 1,
                                         }}
                                     >
                                         Cancel
