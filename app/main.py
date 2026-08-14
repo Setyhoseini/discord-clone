@@ -73,7 +73,7 @@ app.add_middleware(
         "http://localhost",            # nginx on port 80
         "http://127.0.0.1",            # same
         "http://discord_frontend",     # container name (if using internal)
-        "https://your-render-frontend.onrender.com"  # for deployment
+        "https://discord-frontend-5qyc.onrender.com/"  # for deployment
     ],
     allow_credentials=True,
     allow_methods=["*"],

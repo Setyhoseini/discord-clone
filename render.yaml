@@ -2,7 +2,7 @@ services:
   - type: web
     name: discord-backend
     runtime: docker
-    repo: https://github.com/Setyhoseini/discord-clone
+    repo: https://github.com/your-username/discord-clone
     plan: free
     envVars:
       - key: DATABASE_URL
@@ -15,17 +15,25 @@ services:
         value: HS256
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
         value: 10080
+      - key: ENVIRONMENT
+        value: production
+      - key: UPLOAD_DIR
+        value: uploads
+      - key: PROFILE_DIR
+        value: static/profiles
     dockerfilePath: ./backend.Dockerfile
 
   - type: web
     name: discord-frontend
     runtime: docker
-    repo: https://github.com/Setyhoseini/discord-clone
+    repo: https://github.com/your-username/discord-clone
     plan: free
     dockerfilePath: ./frontend.Dockerfile
+    buildArgs:
+      - VITE_API_URL=https://discord-backend-xpx4.onrender.com
     envVars:
       - key: VITE_API_URL
-        value: https://discord-backend.onrender.com
+        value: https://discord-backend-xpx4.onrender.com
 
 databases:
   - name: discord-db
