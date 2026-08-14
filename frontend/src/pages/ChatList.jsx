@@ -267,7 +267,7 @@ export default function ChatList() {
                             <MenuIcon />
                         </IconButton>
 
-                        {/* Title – now responsive, no fixed width */}
+                        {/* Title – stays left, short text */}
                         <Typography
                             variant="h6"
                             sx={{
@@ -285,7 +285,7 @@ export default function ChatList() {
                                     : 'Channels'}
                         </Typography>
 
-                        {/* Search field – flexible, takes remaining space */}
+                        {/* Search – hidden on mobile, flex on desktop */}
                         <TextField
                             size="small"
                             placeholder="Search chats..."
@@ -311,9 +311,12 @@ export default function ChatList() {
                             }}
                         />
 
-                        {/* Right icons – fixed on the right */}
-                        <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0, ml: { xs: 0.5, sm: 1 } }}>
-                            <IconButton onClick={toggleTheme} sx={{ width: 32, height: 32, mr: 0.5 }}>
+                        {/* Spacer to push icons to the right */}
+                        <Box sx={{ flex: 1, display: { xs: 'block', md: 'none' } }} />
+
+                        {/* Right icons – always at the end */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0, ml: 'auto' }}>
+                            <IconButton onClick={toggleTheme} sx={{ width: 40, height: 40, mr: 0.5 }}>
                                 {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
                             </IconButton>
                             <IconButton onClick={() => navigate('/profile')} sx={{ p: 0.5 }}>
